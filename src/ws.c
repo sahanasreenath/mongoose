@@ -58,9 +58,11 @@ static void ws_handshake(struct mg_connection *c, const struct mg_str *wskey,
   mg_send(c, "\r\n", 2);
 }
 
-static uint32_t be32(const uint8_t *p) {
-  return (((uint32_t) p[3]) << 0) | (((uint32_t) p[2]) << 8) |
-         (((uint32_t) p[1]) << 16) | (((uint32_t) p[0]) << 24);
+static inline uint32_t le32(const uint8_t *p) {
+    return ((uint32_t)p[0])       |
+           ((uint32_t)p[1] << 8)  |
+           ((uint32_t)p[2] << 16) |
+           ((uint32_t)p[3] << 24);
 }
 
 static size_t ws_process(uint8_t *buf, size_t len, struct ws_msg *msg) {
